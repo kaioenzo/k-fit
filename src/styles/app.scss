@@ -1,0 +1,35 @@
+/* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
+.background-image-globally {
+  background-image: url("$assets/svelte.svg");
+  width: 10rem;
+  height: 10rem;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.pre {
+  font-family: monospace;
+  background-color: #d3d3d3;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+$pallete: (
+  accent-blue: #025d93,
+  light-blue: #86f4ee,
+  accent-purple: #3e084c,
+  light-purple: #481865,
+  white: #ffffff,
+  accent-rose: #e91c4c,
+  light-rose: #e3526e,
+);
