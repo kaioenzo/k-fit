@@ -1,4 +1,15 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .background-image-globally {
   background-image: url("$assets/svelte.svg");
   width: 10rem;
@@ -19,9 +30,18 @@
   flex-wrap: wrap;
   flex-direction: column;
 }
+.container-row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 $pallete: (

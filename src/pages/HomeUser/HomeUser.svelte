@@ -1,7 +1,10 @@
 <script lang="ts">
+  import {
+    LocalNotifications,
+    type ScheduleOptions,
+  } from "@capacitor/local-notifications";
   import { Preferences } from "@capacitor/preferences";
   import { onMount } from "svelte";
-
   type User = {
     waterLevel: number;
   };
@@ -35,6 +38,35 @@
     await getUserWaterLevel();
   }
 
+  async function scheduleNotification() {
+    try {
+      await LocalNotifications.removeAllDeliveredNotifications();
+    } catch (ex) {
+      alert(ex);
+    }
+
+    let options: ScheduleOptions = {
+      notifications: [
+        {
+          id: 111,
+          title: "Não esqueça de beber água!",
+          body: "Espcecialistas recomendam beber no mínimo 2l de água por dia",
+          smallIcon: "res://drawable/splash",
+          summaryText: "Summary text",
+          extra: {
+            url: "/profile",
+          },
+        },
+      ],
+    };
+
+    try {
+      await LocalNotifications.schedule(options);
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
   onMount(async () => {
     await getUserWaterLevel();
   });
@@ -43,16 +75,20 @@
 <div>
   <h1>Home User</h1>
   <h2>Your water level is</h2>
-  <button on:click={setUserWaterLevel}>Add water</button>
+  <button on:click={scheduleNotification}>Add water</button>
   <input
     type="number"
     max="2000"
     bind:value={waterLevel}
   />
-  <button on:click={resetUserWaterLevel}>Reset</button>
-  {waterLevel}
+  <button
+    on:click={() => {
+      resetUserWaterLevel;
+      scheduleNotification;
+    }}>Reset</button
+  >
   {#if user}
-    <h3>{user.waterLevel}ml of 2000ml</h3>
+    <h3>{user.waterLevel ?? 0}ml of 2000ml</h3>
   {/if}
 </div>
 

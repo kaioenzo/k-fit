@@ -16,3 +16,7 @@ export type PlayFunctionParameter<Component extends SvelteComponent> =
       >;
     };
   };
+
+export type NotificationDeliveredData = {
+  url: string;
+};

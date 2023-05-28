@@ -136,7 +136,7 @@ and the follow the guides below:
 |-vitest.config.ts  # Configure how the app is tested
 ```
 
-More info here: <https://docs.vlgi.com/team/dev/stack-guide/web-spa/>
+More info here: https://docs.vlgi.com/team/dev/stack-guide/web-spa/
 
 ## Technical details
 
