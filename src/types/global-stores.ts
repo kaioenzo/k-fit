@@ -3,4 +3,5 @@ export type UserStore = {
   image?: string;
   email: string;
   waterLevel: number;
+  waterPerDayInML?: number;
 };

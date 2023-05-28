@@ -28,6 +28,8 @@
       }
       return u;
     });
+
+    await scheduleNotification();
   }
 
   async function resetUserWaterLevel() {
@@ -56,14 +58,17 @@
     let options: ScheduleOptions = {
       notifications: [
         {
-          id: 111,
-          title: "Não esqueça de beber água!",
+          id: 1,
+          title: `Não esqueça de beber água! Você ainda precisa beber ${
+            ($user.waterPerDayInML ?? 2000) - $user.waterLevel
+          }ml de água!`,
           body: "Espcecialistas recomendam beber no mínimo 2l de água por dia",
           smallIcon: "res://drawable/splash",
           summaryText: "Summary text",
           extra: {
             url: "/home",
           },
+          schedule: { repeats: true, on: { minute: 1 }, every: "minute" },
         },
       ],
     };
