@@ -1,41 +1,49 @@
 <script lang="ts">
+  import { user } from "$stores/global";
   import {
     LocalNotifications,
     type ScheduleOptions,
   } from "@capacitor/local-notifications";
   import { Preferences } from "@capacitor/preferences";
-  import { onMount } from "svelte";
-  type User = {
-    waterLevel: number;
-  };
 
   let waterLevel: number | undefined;
-  let user: User | undefined;
 
-  async function setUserWaterLevel() {
+  async function updateUserWaterLevel() {
     await Preferences.set({
       key: "user",
       value: JSON.stringify({
-        waterLevel: user.waterLevel + waterLevel,
+        name: $user.name,
+        email: $user.email,
+        image: $user.image,
+        waterLevel: $user.waterLevel + waterLevel,
       }),
     });
-    await getUserWaterLevel();
-  }
 
-  async function getUserWaterLevel() {
-    const ret = await Preferences.get({ key: "user" });
-    user = JSON.parse(ret.value) as unknown as User;
-    console.log(user);
+    user.update((u) => {
+      if (!u.waterLevel) {
+        u.waterLevel = 0;
+      }
+      if (u) {
+        u.waterLevel += waterLevel;
+      }
+      return u;
+    });
   }
 
   async function resetUserWaterLevel() {
     await Preferences.set({
       key: "user",
       value: JSON.stringify({
+        name: $user.name,
+        email: $user.email,
+        image: $user.image,
         waterLevel: 0,
       }),
     });
-    await getUserWaterLevel();
+    user.update((u) => {
+      u.waterLevel = 0;
+      return u;
+    });
   }
 
   async function scheduleNotification() {
@@ -54,7 +62,7 @@
           smallIcon: "res://drawable/splash",
           summaryText: "Summary text",
           extra: {
-            url: "/profile",
+            url: "/home",
           },
         },
       ],
@@ -66,29 +74,25 @@
       console.error(ex);
     }
   }
-
-  onMount(async () => {
-    await getUserWaterLevel();
-  });
 </script>
 
 <div>
   <h1>Home User</h1>
   <h2>Your water level is</h2>
-  <button on:click={scheduleNotification}>Add water</button>
+  <button on:click={updateUserWaterLevel}>Add water</button>
   <input
     type="number"
     max="2000"
     bind:value={waterLevel}
   />
   <button
-    on:click={() => {
-      resetUserWaterLevel;
-      scheduleNotification;
+    on:click={async () => {
+      await resetUserWaterLevel();
+      await scheduleNotification();
     }}>Reset</button
   >
-  {#if user}
-    <h3>{user.waterLevel ?? 0}ml of 2000ml</h3>
+  {#if $user}
+    <h3>{$user.waterLevel ?? 0}ml of 2000ml</h3>
   {/if}
 </div>
 

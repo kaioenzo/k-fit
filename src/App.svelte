@@ -1,23 +1,22 @@
 <script lang="ts">
-  import lunaImg from "$assets/Luna.jpg";
   import BottomNavigation from "$components/BottomNavigation/BottomNavigation.svelte";
   import Header from "$components/Header/Header.svelte";
   import { user } from "$stores/global";
+  import type { UserStore } from "$types/global-stores";
   import type { NotificationDeliveredData } from "$types/utils";
   import {
     LocalNotifications,
     type ActionPerformed,
   } from "@capacitor/local-notifications";
+  import { Preferences } from "@capacitor/preferences";
   import { onDestroy, onMount, tick } from "svelte";
   import Router, { push } from "svelte-spa-router";
   import { conditionsFailHandler, routeLoadingHandler, routes } from "./routes";
 
-  const userMock = {
-    name: "Kaio Enzo",
-    image: lunaImg,
-    email: "teste@mail.com",
-  };
+  let userPersistedData: UserStore;
+
   onMount(async () => {
+    await loginUser();
     await LocalNotifications.addListener(
       "localNotificationActionPerformed",
       (notification: ActionPerformed) => {
@@ -37,6 +36,31 @@
     );
   });
 
+  async function loginUser() {
+    const ret = await Preferences.get({ key: "user" });
+    if (!ret.value) {
+      userPersistedData = { email: "k@mail.com", name: "Kaio", waterLevel: 0 };
+      await Preferences.set({
+        key: "user",
+        value: JSON.stringify(userPersistedData),
+      });
+    } else {
+      userPersistedData = JSON.parse(ret.value) as UserStore;
+    }
+
+    user.update(() => {
+      return userPersistedData;
+    });
+
+    push("/home")
+      .then(async () => {
+        await tick();
+      })
+      .catch((e) => {
+        throw e;
+      });
+  }
+
   onDestroy(async () => {
     await LocalNotifications.removeAllListeners();
   });
@@ -45,16 +69,7 @@
 <header>
   <Header
     user={$user}
-    on:login={() => {
-      $user = userMock;
-      push("/home")
-        .then(async () => {
-          await tick();
-        })
-        .catch((e) => {
-          throw e;
-        });
-    }}
+    on:login={loginUser}
     on:logout={() => {
       push("/")
         .then(async () => {
@@ -65,7 +80,7 @@
           throw e;
         });
     }}
-    on:createAccount={() => ($user = userMock)}
+    on:createAccount={() => loginUser}
   />
 </header>
 <main>

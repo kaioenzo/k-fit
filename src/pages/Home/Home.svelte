@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { user } from "$stores/global";
-  import { tick } from "svelte";
-  import { push } from "svelte-spa-router";
 </script>
 
 <div>
@@ -9,18 +6,18 @@
     <h1>K-fit</h1>
     <h3>Você deve logar no app para ter acesso a todos os recursos!</h3>
   </article>
-  <button
+  <!-- <button
     on:click={() => {
       push("/home")
         .then(async () => {
           await tick();
-          $user = { email: "teste", name: "kaio" };
+          $user = { email: "teste", name: "kaio", waterLevel: 0 };
         })
         .catch((e) => {
           throw e;
         });
-    }}>Entrar</button
-  >
+    }}>Entrar</button -->
+  <!-- > -->
 </div>
 
 <style lang="scss">
