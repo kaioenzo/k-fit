@@ -9,4 +9,5 @@ export default {
   $types: path.resolve("./src/types"),
   $stores: path.resolve("./src/stores"),
   $policies: path.resolve("./src/policies"),
+  $utils: path.resolve("./src/utils"),
 };

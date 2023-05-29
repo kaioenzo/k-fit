@@ -4,4 +4,7 @@ export type UserStore = {
   email: string;
   waterLevel: number;
   waterPerDayInML?: number;
+  doseOfWater: number;
+  startNotificationHour: string;
+  endNotificationHour: string;
 };

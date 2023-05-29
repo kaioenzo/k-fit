@@ -23,7 +23,8 @@
       "$styles/*": ["src/styles/*"],
       "$types/*": ["src/types/*"],
       "$stores/*": ["src/stores/*"],
-      "$policies/*": ["src/policies/*"]
+      "$policies/*": ["src/policies/*"],
+      "$utils/*": ["src/utils/*"]
     }
   },
   "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],

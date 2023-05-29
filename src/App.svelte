@@ -9,9 +9,13 @@
     type ActionPerformed,
   } from "@capacitor/local-notifications";
   import { Preferences } from "@capacitor/preferences";
+  import dayjs from "dayjs";
+  import customParseFormat from "dayjs/plugin/customParseFormat";
   import { onDestroy, onMount, tick } from "svelte";
   import Router, { push } from "svelte-spa-router";
   import { conditionsFailHandler, routeLoadingHandler, routes } from "./routes";
+  // dayjs.extend(utc);
+  dayjs.extend(customParseFormat);
 
   let userPersistedData: UserStore;
 
@@ -39,7 +43,14 @@
   async function loginUser() {
     const ret = await Preferences.get({ key: "user" });
     if (!ret.value) {
-      userPersistedData = { email: "k@mail.com", name: "Kaio", waterLevel: 0 };
+      userPersistedData = {
+        email: "kaio@mail.com",
+        name: "Kaio",
+        waterLevel: 0,
+        doseOfWater: 200,
+        startNotificationHour: "08:00",
+        endNotificationHour: "23:00",
+      };
       await Preferences.set({
         key: "user",
         value: JSON.stringify(userPersistedData),
@@ -48,9 +59,7 @@
       userPersistedData = JSON.parse(ret.value) as UserStore;
     }
 
-    user.update(() => {
-      return userPersistedData;
-    });
+    user.update(() => userPersistedData);
 
     push("/home")
       .then(async () => {
@@ -73,8 +82,8 @@
     on:logout={() => {
       push("/")
         .then(async () => {
-          await tick();
           $user = null;
+          await tick();
         })
         .catch((e) => {
           throw e;
