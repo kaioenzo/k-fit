@@ -1,3 +1,4 @@
+import Breaks from "$pages/Breaks/Breaks.svelte";
 import Home from "$pages/Home/Home.svelte";
 import HomeUser from "$pages/HomeUser/HomeUser.svelte";
 import NotAuthorized from "$pages/NotAuthorized/NotAuthorized.svelte";
@@ -28,12 +29,17 @@ routes.set(
   })
 );
 routes.set(
+  "/breaks",
+  wrap({ component: Breaks, conditions: [isUserLoggedIn] })
+);
+routes.set(
   "/profile",
   wrap({
     component: Profile,
     conditions: [isUserLoggedIn],
   })
 );
+routes.set("/breaks", wrap({ component: Breaks }));
 routes.set(
   "/not-authorized",
   wrap({
