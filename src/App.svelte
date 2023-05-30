@@ -12,9 +12,8 @@
   import dayjs from "dayjs";
   import customParseFormat from "dayjs/plugin/customParseFormat";
   import { onDestroy, onMount, tick } from "svelte";
-  import Router, { push } from "svelte-spa-router";
+  import Router, { push, replace } from "svelte-spa-router";
   import { conditionsFailHandler, routeLoadingHandler, routes } from "./routes";
-  // dayjs.extend(utc);
   dayjs.extend(customParseFormat);
 
   let userPersistedData: UserStore;
@@ -27,14 +26,24 @@
         let jsonData = JSON.stringify(notification.notification.extra);
         let data = JSON.parse(jsonData) as NotificationDeliveredData;
 
-        if (data.url) {
-          push(data.url)
-            .then(async () => {
-              await tick();
-            })
-            .catch((e) => {
-              throw e;
-            });
+        switch (data.url) {
+          case "/home":
+            push(data.url)
+              .then(async () => {
+                await tick();
+              })
+              .catch((e) => {
+                throw e;
+              });
+            break;
+          case "/breaks":
+            push(data.url)
+              .then(async () => {
+                await tick();
+              })
+              .catch((e) => {
+                throw e;
+              });
         }
       }
     );
@@ -50,6 +59,9 @@
         doseOfWater: 200,
         startNotificationHour: "08:00",
         endNotificationHour: "23:00",
+        breaks: 0,
+        breaksMinutes: 0,
+        waterPerDayInML: 2000,
       };
       await Preferences.set({
         key: "user",
@@ -61,10 +73,22 @@
 
     user.update(() => userPersistedData);
 
+    await tick();
     push("/home")
       .then(async () => {
         await tick();
       })
+      .catch((e) => {
+        throw e;
+      });
+  }
+
+  function logout() {
+    user.update((u) => {
+      return null;
+    });
+    replace("/")
+      .then(async () => await tick())
       .catch((e) => {
         throw e;
       });
@@ -79,16 +103,7 @@
   <Header
     user={$user}
     on:login={loginUser}
-    on:logout={() => {
-      push("/")
-        .then(async () => {
-          $user = null;
-          await tick();
-        })
-        .catch((e) => {
-          throw e;
-        });
-    }}
+    on:logout={logout}
     on:createAccount={() => loginUser}
   />
 </header>
