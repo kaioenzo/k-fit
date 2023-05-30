@@ -7,4 +7,6 @@ export type UserStore = {
   doseOfWater: number;
   startNotificationHour: string;
   endNotificationHour: string;
+  breaks: number;
+  breaksMinutes: number;
 };

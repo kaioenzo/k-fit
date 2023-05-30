@@ -1,23 +1,16 @@
 <script lang="ts">
+  import { user } from "$stores/global";
 </script>
 
 <div>
-  <article>
-    <h1>K-fit</h1>
-    <h3>Você deve logar no app para ter acesso a todos os recursos!</h3>
-  </article>
-  <!-- <button
-    on:click={() => {
-      push("/home")
-        .then(async () => {
-          await tick();
-          $user = { email: "teste", name: "kaio", waterLevel: 0 };
-        })
-        .catch((e) => {
-          throw e;
-        });
-    }}>Entrar</button -->
-  <!-- > -->
+  {#if !$user}
+    <article>
+      <h1>K-fit</h1>
+      <h3>Você deve logar no app para ter acesso a todos os recursos!</h3>
+    </article>
+    <button>Entrar</button>
+  {/if}
+  <h2>K-Fit</h2>
 </div>
 
 <style lang="scss">
