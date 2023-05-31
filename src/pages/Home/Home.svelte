@@ -4,44 +4,45 @@
 </script>
 
 <div class="container text-center justify-center flex-column">
-  {#if !$user}
+  {#if $user === null}
     <article>
       <h1>K-fit</h1>
       <h3>Você deve logar no app para ter acesso a todos os recursos!</h3>
     </article>
     <button>Entrar</button>
-  {/if}
-  <h1>K-Fit</h1>
-  <h2>Gerencie seus melhores hábitos!</h2>
-  <div class="container info-card">
-    <h3>Hoje você já</h3>
-    <div class="container-row container-card-info text-center justify-center">
-      <div class="card-water container text-center">
-        <h4>
-          Bebeu {$user.waterLevel}ml de água
-        </h4>
-        <button
-          on:click={() => {
-            push("/home").catch((e) => console.log(e));
-          }}
-        >
-          Beber + água
-        </button>
-      </div>
-      <div class="card-breaks container text-center">
-        <h4>
-          Fez {$user.breaks} pausas
-        </h4>
-        <button
-          on:click={() => {
-            push("/home").catch((e) => console.log(e));
-          }}
-        >
-          Fazer +1 pausa
-        </button>
+  {:else}
+    <h1>K-Fit</h1>
+    <h2>Gerencie seus melhores hábitos!</h2>
+    <div class="container info-card">
+      <h3>Hoje você já</h3>
+      <div class="container-row container-card-info text-center justify-center">
+        <div class="card-water container text-center">
+          <h4>
+            Bebeu {$user.waterLevel}ml de água
+          </h4>
+          <button
+            on:click={() => {
+              push("/home").catch((e) => console.log(e));
+            }}
+          >
+            Beber + água
+          </button>
+        </div>
+        <div class="card-breaks container text-center">
+          <h4>
+            Fez {$user.breaks} pausas
+          </h4>
+          <button
+            on:click={() => {
+              push("/breaks").catch((e) => console.log(e));
+            }}
+          >
+            Fazer +1 pausa
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  {/if}
 </div>
 
 <style lang="scss">

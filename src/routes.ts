@@ -39,7 +39,10 @@ routes.set(
     conditions: [isUserLoggedIn],
   })
 );
-routes.set("/breaks", wrap({ component: Breaks }));
+routes.set(
+  "/breaks",
+  wrap({ component: Breaks, conditions: [isUserLoggedIn] })
+);
 routes.set(
   "/not-authorized",
   wrap({

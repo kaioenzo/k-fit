@@ -25,25 +25,27 @@
   });
 </script>
 
-<div class="container justify-center">
-  <h1>Registre sua pausas para alongamento</h1>
-  <div class="container justify-center text-center breaks-main">
-    <h2>Você já fez: {$user.breaks} pausas</h2>
-    <h3>Isso dá {$user.breaksMinutes} minutos de alongamento hoje</h3>
-    <h4>Adicionar pausa</h4>
-    <div class="breaks-add-pause">
-      <input
-        type="number"
-        placeholder="Digite o tempo da pausa"
-        bind:value={breaks}
-      />
-      <button
-        on:click={addBreak}
-        class="add-button">Adicionar</button
-      >
+{#if $user !== null}
+  <div class="container justify-center">
+    <h1>Registre sua pausas para alongamento</h1>
+    <div class="container justify-center text-center breaks-main">
+      <h2>Você já fez: {$user.breaks} pausas</h2>
+      <h3>Isso dá {$user.breaksMinutes} minutos de alongamento hoje</h3>
+      <h4>Adicionar pausa</h4>
+      <div class="breaks-add-pause">
+        <input
+          type="number"
+          placeholder="Digite o tempo da pausa"
+          bind:value={breaks}
+        />
+        <button
+          on:click={addBreak}
+          class="add-button">Adicionar</button
+        >
+      </div>
     </div>
   </div>
-</div>
+{/if}
 
 <style lang="scss">
   .container {

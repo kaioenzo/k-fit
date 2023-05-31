@@ -12,7 +12,7 @@
   import dayjs from "dayjs";
   import customParseFormat from "dayjs/plugin/customParseFormat";
   import { onDestroy, onMount, tick } from "svelte";
-  import Router, { push, replace } from "svelte-spa-router";
+  import Router, { push } from "svelte-spa-router";
   import { conditionsFailHandler, routeLoadingHandler, routes } from "./routes";
   dayjs.extend(customParseFormat);
 
@@ -70,28 +70,21 @@
     } else {
       userPersistedData = JSON.parse(ret.value) as UserStore;
     }
-
     user.update(() => userPersistedData);
-
-    await tick();
-    push("/home")
-      .then(async () => {
-        await tick();
-      })
-      .catch((e) => {
-        throw e;
-      });
   }
 
   function logout() {
     user.update((u) => {
+      $user = null;
       return null;
     });
-    replace("/")
-      .then(async () => await tick())
-      .catch((e) => {
-        throw e;
-      });
+
+    console.log("logout");
+
+    push("/").catch((e) => {
+      console.log(e);
+      throw e;
+    });
   }
 
   onDestroy(async () => {
