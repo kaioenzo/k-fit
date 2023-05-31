@@ -117,7 +117,4 @@
 </main>
 
 <style lang="scss">
-  main {
-    padding: 0.5rem;
-  }
 </style>

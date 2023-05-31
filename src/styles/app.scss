@@ -1,4 +1,6 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 * {
   padding: 0;
   margin: 0;
@@ -8,6 +10,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  font-family: "Roboto", sans-serif;
 }
 
 .background-image-globally {
