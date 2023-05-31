@@ -11,18 +11,38 @@ export async function scheduleLocalNotification(
   userData: UserStore,
   url: string
 ) {
-  const { startNotificationHour, endNotificationHour } = userData;
-  const end = dayjs(startNotificationHour, "HH:mm");
-  const start = dayjs(endNotificationHour, "HH:mm");
+  const {
+    startNotificationHour,
+    endNotificationHour,
+    waterPerDayInML,
+    waterLevel,
+  } = userData;
+  let end = dayjs(startNotificationHour, "HH:mm");
+  let start = dayjs(endNotificationHour, "HH:mm");
 
   if (!start.isValid() || !end.isValid()) {
     alert("Invalid start or end time");
     return;
   }
 
-  const currentNotificationTime = dayjs();
+  let currentNotificationTime = dayjs();
 
   if (interval === 15) {
+    if (waterLevel >= waterPerDayInML) {
+      start = dayjs()
+        .set("month", dayjs().add(1, "day").get("month"))
+        .set("day", dayjs().add(1, "day").get("day"))
+        .set("hour", Number(endNotificationHour.split(":")[0]))
+        .set("minute", Number(endNotificationHour.split(":")[1]));
+
+      end = start
+        .clone()
+        .set("hour", Number(startNotificationHour.split(":")[0]))
+        .set("minute", Number(startNotificationHour.split(":")[1]));
+
+      currentNotificationTime = end.clone();
+    }
+
     await scheduleWaterNotification(
       userData,
       currentNotificationTime,
@@ -30,19 +50,29 @@ export async function scheduleLocalNotification(
       start
     );
   } else if (interval === 30) {
-    await scheduleBreakNotification(userData, currentNotificationTime, start);
+    await scheduleBreakNotification(
+      userData,
+      currentNotificationTime,
+      start,
+      end
+    );
   }
 }
 
 async function scheduleBreakNotification(
   userData: UserStore,
   currentNotificationTime: Dayjs,
-  end: Dayjs
+  end: Dayjs,
+  start: Dayjs
 ) {
   await clearNotification("break");
 
   const notifications = [];
   let now = currentNotificationTime.add(1, "minute");
+
+  if (now.isBefore(start)) {
+    now = start;
+  }
 
   while (now.isBefore(end)) {
     notifications.push({
@@ -71,8 +101,12 @@ async function scheduleWaterNotification(
   const timeDifference = end.diff(currentNotificationTime, "minute");
   const remainingWater = timeDifference * waterPerDayInML;
   let notificationNumber = Math.ceil(remainingWater / waterPerDayInML);
-  let now = currentNotificationTime.add(1, "minute");
+  let now = currentNotificationTime;
   const notifications: LocalNotificationSchema[] = [];
+
+  if (now.isBefore(start)) {
+    now = start;
+  }
 
   while (
     (dayjs().diff(dayjs(endNotificationHour), "minutes") / 15) * doseOfWater <
@@ -84,6 +118,7 @@ async function scheduleWaterNotification(
       return u;
     });
   }
+  console.log(now, start);
 
   for (; notificationNumber > 0 && now.isBefore(end); notificationNumber--) {
     notifications.push({
@@ -99,6 +134,8 @@ async function scheduleWaterNotification(
   }
 
   await LocalNotifications.schedule({ notifications });
+
+  console.log(notifications);
 }
 
 type notificationType = "water" | "break";
