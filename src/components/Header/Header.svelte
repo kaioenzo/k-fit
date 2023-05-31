@@ -54,7 +54,7 @@
           />
         </g>
       </svg>
-      <h1>Acme</h1>
+      <h1>K-Fit</h1>
     </div>
     <div>
       {#if user}
