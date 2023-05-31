@@ -37,7 +37,10 @@
         placeholder="Digite o tempo da pausa"
         bind:value={breaks}
       />
-      <button on:click={addBreak}>Adicionar</button>
+      <button
+        on:click={addBreak}
+        class="add-button">Adicionar</button
+      >
     </div>
   </div>
 </div>
@@ -50,5 +53,16 @@
 
   .breaks-main {
     margin-top: 1rem;
+  }
+
+  input {
+    text-align: center;
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
   }
 </style>
