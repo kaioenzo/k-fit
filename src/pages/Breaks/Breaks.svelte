@@ -31,7 +31,7 @@
     <h2>Você já fez: {$user.breaks} pausas</h2>
     <h3>Isso dá {$user.breaksMinutes} minutos de alongamento hoje</h3>
     <h4>Adicionar pausa</h4>
-    <div>
+    <div class="breaks-add-pause">
       <input
         type="number"
         placeholder="Digite o tempo da pausa"
@@ -46,6 +46,10 @@
 </div>
 
 <style lang="scss">
+  .container {
+    padding-top: 1rem;
+  }
+
   h1 {
     font-size: 1.2rem;
     text-align: center;
@@ -53,6 +57,15 @@
 
   .breaks-main {
     margin-top: 1rem;
+  }
+  .breaks-main h2,
+  h3,
+  h4 {
+    margin-top: 0.5rem;
+  }
+
+  .breaks-add-pause {
+    margin-top: 1.5rem;
   }
 
   input {
